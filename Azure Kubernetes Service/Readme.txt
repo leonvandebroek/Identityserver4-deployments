@@ -1,4 +1,4 @@
-To configure a cubernetes cluster to use a production certificate of letsencrypt
+To configure a Kubernetes cluster to use a production certificate of letsencrypt
 the following steps must be performed on a newly installed AKS cluster with the following requirements:
 - addon-http-routing must be checked
 - cluster must be newly created
