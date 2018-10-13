@@ -1,0 +1,22 @@
+# To ensure identityserver4 can send it's larger than standard header-size, we need to edit the configuration.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    #addonmanager.kubernetes.io/mode: EnsureExists
+    app: addon-http-application-routing-ingress-nginx
+    kubernetes.io/cluster-service: "true"
+  name: addon-http-application-routing-nginx-configuration
+  namespace: kube-system
+data:
+  proxy-buffer-size: "128k"
+  proxy-buffers: "4 256k"
+  proxy-read-timeout: "150"
+  proxy-http-version: "1.1"
+  client-header-buffer-size: "64k"
+  large-client-header-buffers: "8 64k"
+  sendfile: "on"
+  keepalive-timeout: "65"
+  # By disabling HTTP/2 you prevent login loops in identityserver. Very important.
+  use-http2: "false"

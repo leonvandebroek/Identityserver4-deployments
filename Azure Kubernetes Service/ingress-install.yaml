@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: <name for the first ingress>
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - <your own, by CNAME redirected to *.aksapp.io, FQDN> #same as in first certificate in Cert-install.yaml
+    secretName: tls-secret-<name for this certificate> #you chose for first certificate in Cert-install.yaml
+  rules:
+  - host: <Personal FQDN part for this ingress>.<azure region>.aksapp.io #this is needed so that DNS kan automatically be assigned, no need for public-ip DNS registrations this way.
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: <your first service name>
+          servicePort: 80
+  - host: <your own, by CNAME redirected to *.aksapp.io, FQDN> #same as in first certificate in Cert-install.yaml
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: <your first service name>
+          servicePort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: <name for this second ingress>
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - <your own, by CNAME redirected to *.aksapp.io, FQDN> #same as in second certificate Cert-install.yaml
+    secretName: tls-secret-<name for this certificate> #you chose for second certificate in Cert-install.yaml
+  rules:
+  - host: <Personal FQDN part for this ingress>.<azure region>.aksapp.io #this is needed so that DNS kan automatically be assigned, no need for public-ip DNS registrations this way.
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: <your additional service name>
+          servicePort: 80
+  - host: <your own, by CNAME redirected to *.aksapp.io, FQDN> #same as in first certificate in Cert-install.yaml
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: <your additional service name>
+          servicePort: 80

@@ -1,0 +1,35 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: tls-secret-<name for this certificate>
+spec:
+  secretName: tls-secret-<name for this certificate>
+  dnsNames:
+    - <your FQDN>
+  acme:
+    config:
+    - http01:
+        ingressClass: addon-http-application-routing
+      domains:
+      - <your FQDN>
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: tls-secret-<name for this certificate>
+spec:
+  secretName: tls-secret-<name for this certificate>
+  dnsNames:
+    - <your additional FQDN>
+  acme:
+    config:
+    - http01:
+        ingressClass: addon-http-application-routing
+      domains:
+      - <your additional FQDN>
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
